@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Language Translator</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='js/languages.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/toast.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        <h1>🌍 AI Language Translator</h1>
+
+        <p class="subtitle">
+            Translate text between multiple languages instantly.
+        </p>
+
+        <!-- Language Selection -->
+        <div class="language-section">
+
+            <select id="source-language"></select>
+
+            <button id="swap-btn" title="Swap Languages">
+                ⇄
+            </button>
+
+            <select id="target-language"></select>
+
+        </div>
+
+        <!-- Input Text -->
+        <textarea
+                id="input-text"
+                placeholder="Enter text to translate..."
+        ></textarea>
+
+        <!-- Translate Button -->
+        <button id="translate-btn">
+            Translate
+        </button>
+
+        <!-- Output Text -->
+        <textarea
+                id="output-text"
+                placeholder="Translation will appear here..."
+                readonly
+        ></textarea>
+
+        <!-- Action Buttons -->
+        <div class="actions">
+
+            <button id="copy-btn">
+                📋 Copy
+            </button>
+
+            <button id="speak-btn">
+                🔊 Speak
+            </button>
+
+            <button id="clear-btn">
+                🗑 Clear
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ===============================
+     Toast Notification
+================================ -->
+
+<div id="toast"></div>
+
+</body>
+</html>
