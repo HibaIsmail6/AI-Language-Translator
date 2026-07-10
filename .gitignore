@@ -9,7 +9,7 @@ __pycache__/
 .env
 
 # Database
-*.db
+database/translations.db
 
 # IDE
 .idea/
