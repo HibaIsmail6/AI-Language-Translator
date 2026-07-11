@@ -28,15 +28,16 @@ def translate():
             "error": "Please enter some text to translate."
         }), 400
 
-    translated = translate_text(
+    translated, detected_language = translate_text(
         text=text,
         source=source,
         target=target
     )
+
     save_translation(
         source_text=text,
         translated_text=translated,
-        source_language=source,
+        source_language=detected_language,
         target_language=target
     )
 

@@ -6,6 +6,7 @@
     <title>AI Language Translator</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
     <script src="{{ url_for('static', filename='js/languages.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/toast.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
@@ -15,59 +16,90 @@
 
 <div class="container">
 
-    <div class="card">
+    <div class="app-layout">
 
-        <h1>🌍 AI Language Translator</h1>
+        <!-- ===============================
+             History Panel
+        ================================ -->
 
-        <p class="subtitle">
-            Translate text between multiple languages instantly.
-        </p>
+        <aside class="history-panel">
 
-        <!-- Language Selection -->
-        <div class="language-section">
+            <h2>🕒 Recent History</h2>
 
-            <select id="source-language"></select>
+            <div id="history-list">
 
-            <button id="swap-btn" title="Swap Languages">
-                ⇄
+                <p class="empty-history">
+                    No translations yet.
+                </p>
+
+            </div>
+
+        </aside>
+
+        <!-- ===============================
+             Translator Card
+        ================================ -->
+
+        <div class="card">
+
+            <h1>🌍 AI Language Translator</h1>
+
+            <p class="subtitle">
+                Translate text between multiple languages instantly.
+            </p>
+
+            <!-- Language Selection -->
+
+            <div class="language-section">
+
+                <select id="source-language"></select>
+
+                <button id="swap-btn" title="Swap Languages">
+                    ⇄
+                </button>
+
+                <select id="target-language"></select>
+
+            </div>
+
+            <!-- Input -->
+
+            <textarea
+                    id="input-text"
+                    placeholder="Enter text to translate..."
+            ></textarea>
+
+            <!-- Translate -->
+
+            <button id="translate-btn">
+                Translate
             </button>
 
-            <select id="target-language"></select>
+            <!-- Output -->
 
-        </div>
+            <textarea
+                    id="output-text"
+                    placeholder="Translation will appear here..."
+                    readonly
+            ></textarea>
 
-        <!-- Input Text -->
-        <textarea
-                id="input-text"
-                placeholder="Enter text to translate..."
-        ></textarea>
+            <!-- Actions -->
 
-        <!-- Translate Button -->
-        <button id="translate-btn">
-            Translate
-        </button>
+            <div class="actions">
 
-        <!-- Output Text -->
-        <textarea
-                id="output-text"
-                placeholder="Translation will appear here..."
-                readonly
-        ></textarea>
+                <button id="copy-btn">
+                    📋 Copy
+                </button>
 
-        <!-- Action Buttons -->
-        <div class="actions">
+                <button id="speak-btn">
+                    🔊 Speak
+                </button>
 
-            <button id="copy-btn">
-                📋 Copy
-            </button>
+                <button id="clear-btn">
+                    🗑 Clear
+                </button>
 
-            <button id="speak-btn">
-                🔊 Speak
-            </button>
-
-            <button id="clear-btn">
-                🗑 Clear
-            </button>
+            </div>
 
         </div>
 

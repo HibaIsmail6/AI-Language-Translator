@@ -19,10 +19,53 @@ body{
 
 .container{
     width:100%;
-    max-width:850px;
+    max-width:1400px;
+    margin:auto;
+}
+
+.app-layout{
+    display:flex;
+    gap:30px;
+    align-items:flex-start;
+}
+
+.history-panel{
+
+    width:320px;
+
+    background:#1e293b;
+
+    border-radius:20px;
+
+    padding:25px;
+
+    box-shadow:0 15px 40px rgba(0,0,0,.35);
+
+    height:750px;
+
+    overflow-y:auto;
+
+}
+
+.history-panel h2{
+
+    color:white;
+
+    margin-bottom:20px;
+
+}
+.empty-history{
+
+    color:#94a3b8;
+
+    text-align:center;
+
+    margin-top:40px;
+
 }
 
 .card{
+    flex:1;
     background:#1e293b;
     border-radius:20px;
     padding:35px;
@@ -200,5 +243,71 @@ textarea::placeholder{
         min-width:auto;
         max-width:none;
     }
+
+}
+/* ===============================
+   History Items
+================================ */
+
+.history-item{
+
+    background:#334155;
+
+    border-radius:12px;
+
+    padding:15px;
+
+    margin-bottom:15px;
+
+    transition:.3s;
+
+    cursor:pointer;
+
+}
+
+.history-item:hover{
+
+    background:#475569;
+
+}
+
+.history-source{
+
+    color:white;
+
+    font-weight:600;
+
+    word-break:break-word;
+
+}
+
+.history-arrow{
+
+    color:#60a5fa;
+
+    font-size:20px;
+
+    margin:8px 0;
+
+}
+
+.history-target{
+
+    color:#cbd5e1;
+
+    word-break:break-word;
+
+}
+.history-language{
+
+    color:#60a5fa;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    margin-bottom:10px;
+
+    text-transform:capitalize;
 
 }

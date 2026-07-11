@@ -20,6 +20,8 @@ const copyButton = document.getElementById("copy-btn");
 const clearButton = document.getElementById("clear-btn");
 const speakButton = document.getElementById("speak-btn");
 
+const historyList = document.getElementById("history-list");
+
 // ===============================
 // Loading State
 // ===============================
@@ -69,6 +71,71 @@ function loadLanguages() {
 loadLanguages();
 
 // ===============================
+// Load Translation History
+// ===============================
+
+async function loadHistory() {
+
+    try {
+
+        const response = await fetch("/history");
+
+        if (!response.ok) {
+
+            throw new Error("Failed to load history.");
+
+        }
+
+        const history = await response.json();
+
+        historyList.innerHTML = "";
+
+        history.forEach(item => {
+
+            const historyItem = document.createElement("div");
+
+            historyItem.dataset.sourceText = item.source_text;
+            historyItem.dataset.translatedText = item.translated_text;
+            historyItem.dataset.sourceLanguage = item.source_language;
+            historyItem.dataset.targetLanguage = item.target_language;
+
+            historyItem.className = "history-item";
+
+            historyItem.innerHTML = `
+                <p class="history-language">
+                    🌐 ${languages[item.source_language]} → ${languages[item.target_language]}
+                </p>
+
+                <p class="history-source">
+                    ${item.source_text}
+                </p>
+
+                <p class="history-arrow">
+                    →
+                </p>
+
+                <p class="history-target">
+                    ${item.translated_text}
+                </p>
+            `;
+            historyItem.addEventListener("click", restoreHistoryItem);
+
+            historyList.appendChild(historyItem);
+
+        });
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        showToast("Unable to load history.", "error");
+
+    }
+
+}
+// ===============================
 // Translate Text
 // ===============================
 
@@ -110,6 +177,7 @@ async function translateText() {
             throw new Error(data.error);
         }
         outputText.value = data.translated_text;
+        loadHistory();
     }
     catch (error)
     {
@@ -142,6 +210,26 @@ function swapLanguages() {
 
     inputText.value = outputText.value;
     outputText.value = tempText;
+
+}
+
+// ===============================
+// Restore History Item
+// ===============================
+
+function restoreHistoryItem(event) {
+
+    const historyItem = event.currentTarget;
+
+    inputText.value = historyItem.dataset.sourceText;
+
+    outputText.value = historyItem.dataset.translatedText;
+
+    sourceLanguage.value = historyItem.dataset.sourceLanguage;
+
+    targetLanguage.value = historyItem.dataset.targetLanguage;
+
+    showToast("Translation restored.", "success");
 
 }
 
@@ -229,4 +317,6 @@ copyButton.addEventListener("click", copyTranslation);
 clearButton.addEventListener("click", clearText);
 
 speakButton.addEventListener("click", speakTranslation);
+
+loadHistory();
 
