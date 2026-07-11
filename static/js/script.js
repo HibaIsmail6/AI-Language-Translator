@@ -20,6 +20,29 @@ const copyButton = document.getElementById("copy-btn");
 const clearButton = document.getElementById("clear-btn");
 const speakButton = document.getElementById("speak-btn");
 
+// ===============================
+// Loading State
+// ===============================
+
+function setLoadingState(isLoading) {
+
+    translateButton.disabled = isLoading;
+    sourceLanguage.disabled = isLoading;
+    targetLanguage.disabled = isLoading;
+    swapButton.disabled = isLoading;
+
+    if (isLoading) {
+
+        translateButton.textContent = "⏳ Translating...";
+
+    } else {
+
+        translateButton.textContent = "Translate";
+
+    }
+
+}
+
 
 function loadLanguages() {
 
@@ -60,7 +83,7 @@ async function translateText() {
 
     }
 
-    outputText.value = "Translating...";
+    setLoadingState(true);
 
     try {
 
@@ -94,6 +117,12 @@ async function translateText() {
         outputText.value = "";
         showToast(error.message, "error");
     }
+
+    finally {
+
+    setLoadingState(false);
+
+}
 
 }
 
