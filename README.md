@@ -137,7 +137,7 @@ http://127.0.0.1:5000
 
 ### Translation History
 
-![History](screenshots/history panel.png)
+![History](screenshots/history.png)
 
 ## 🔮 Future Improvements
 
