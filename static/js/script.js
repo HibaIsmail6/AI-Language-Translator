@@ -10,17 +10,16 @@
 
 const inputText = document.getElementById("input-text");
 const outputText = document.getElementById("output-text");
-
 const sourceLanguage = document.getElementById("source-language");
 const targetLanguage = document.getElementById("target-language");
-
 const translateButton = document.getElementById("translate-btn");
 const swapButton = document.getElementById("swap-btn");
 const copyButton = document.getElementById("copy-btn");
 const clearButton = document.getElementById("clear-btn");
 const speakButton = document.getElementById("speak-btn");
-
 const historyList = document.getElementById("history-list");
+const clearHistoryButton = document.getElementById("clear-history-btn");
+const characterCount = document.getElementById("character-count");
 
 // ===============================
 // Loading State
@@ -87,13 +86,38 @@ async function loadHistory() {
         }
 
         const history = await response.json();
-
+        console.log(history);
+        console.log(typeof history);
         historyList.innerHTML = "";
 
+        if (history.length === 0) {
+
+    historyList.innerHTML = `
+        <div class="empty-history">
+
+            <div class="empty-history-icon">
+                📭
+            </div>
+
+            <p class="empty-history-title">
+                No translations yet
+            </p>
+
+            <p class="empty-history-text">
+                Start translating to build your history.
+            </p>
+
+        </div>
+    `;
+
+    return;
+
+}
         history.forEach(item => {
 
             const historyItem = document.createElement("div");
 
+            historyItem.dataset.id = item.id;
             historyItem.dataset.sourceText = item.source_text;
             historyItem.dataset.translatedText = item.translated_text;
             historyItem.dataset.sourceLanguage = item.source_language;
@@ -102,22 +126,65 @@ async function loadHistory() {
             historyItem.className = "history-item";
 
             historyItem.innerHTML = `
-                <p class="history-language">
-                    🌐 ${languages[item.source_language]} → ${languages[item.target_language]}
-                </p>
 
-                <p class="history-source">
-                    ${item.source_text}
-                </p>
+    <button class="delete-history-btn">
+        ✕
+    </button>
+    
+    <p class="history-language">
+        🌐 ${languages[item.source_language]} → ${languages[item.target_language]}
+    </p>
 
-                <p class="history-arrow">
-                    →
-                </p>
+    <p class="history-source">
+        ${item.source_text}
+    </p>
 
-                <p class="history-target">
-                    ${item.translated_text}
-                </p>
-            `;
+    <p class="history-arrow">
+        →
+    </p>
+
+    <p class="history-target">
+        ${item.translated_text}
+    </p>
+
+`;
+            const deleteButton = historyItem.querySelector(".delete-history-btn");
+            deleteButton.addEventListener("click", async function (event) {
+
+    event.stopPropagation();
+
+    const confirmDelete = confirm("Delete this translation?");
+
+    if (!confirmDelete) {
+        return;
+    }
+
+    try {
+
+        const response = await fetch(`/history/${historyItem.dataset.id}`, {
+            method: "DELETE"
+        });
+
+        if (!response.ok) {
+            throw new Error("Unable to delete translation.");
+        }
+
+        historyItem.remove();
+
+        showToast("Translation deleted.", "success");
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        showToast(error.message, "error");
+
+    }
+
+});
+
             historyItem.addEventListener("click", restoreHistoryItem);
 
             historyList.appendChild(historyItem);
@@ -275,9 +342,58 @@ function clearText() {
     inputText.value = "";
     outputText.value = "";
 
+    updateCharacterCount();
+
+}
+
+// ===============================
+// Character Counter
+// ===============================
+
+function updateCharacterCount() {
+
+    characterCount.textContent = inputText.value.length;
+
 }
 
 
+// ===============================
+// Clear Translation History
+// ===============================
+
+async function clearHistory() {
+
+    const confirmClear = confirm("Delete all translation history?");
+
+    if (!confirmClear) {
+        return;
+    }
+
+    try {
+
+        const response = await fetch("/history", {
+            method: "DELETE"
+        });
+
+        if (!response.ok) {
+            throw new Error("Unable to clear history.");
+        }
+
+        loadHistory();
+
+        showToast("History cleared successfully!", "success");
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        showToast(error.message, "error");
+
+    }
+
+}
 // ===============================
 // Speak Translation
 // ===============================
@@ -302,21 +418,35 @@ function speakTranslation() {
     window.speechSynthesis.speak(speech);
 
 }
+// ===============================
+// Keyboard Shortcut
+// Ctrl + Enter to Translate
+// ===============================
 
+inputText.addEventListener("keydown", function (event) {
+
+    if (event.ctrlKey && event.key === "Enter") {
+
+        event.preventDefault();
+
+        translateText();
+
+    }
+
+});
 
 // ===============================
 // Event Listeners
 // ===============================
 
 translateButton.addEventListener("click", translateText);
-
 swapButton.addEventListener("click", swapLanguages);
-
 copyButton.addEventListener("click", copyTranslation);
-
 clearButton.addEventListener("click", clearText);
-
 speakButton.addEventListener("click", speakTranslation);
+clearHistoryButton.addEventListener("click", clearHistory);
+inputText.addEventListener("input", updateCharacterCount);
 
 loadHistory();
+updateCharacterCount();
 

@@ -60,6 +60,7 @@ def save_translation(
     connection.close()
 
 def get_translation_history():
+
     connection = get_connection()
 
     cursor = connection.execute("""
@@ -73,3 +74,29 @@ def get_translation_history():
     connection.close()
 
     return [dict(row) for row in rows]
+
+
+def delete_translation(history_id):
+
+    connection = get_connection()
+
+    connection.execute("""
+        DELETE FROM translations
+        WHERE id = ?
+    """, (history_id,))
+
+    connection.commit()
+
+    connection.close()
+
+def clear_translation_history():
+
+    connection = get_connection()
+
+    connection.execute("""
+        DELETE FROM translations
+    """)
+
+    connection.commit()
+
+    connection.close()

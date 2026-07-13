@@ -24,7 +24,14 @@
 
         <aside class="history-panel">
 
-            <h2>🕒 Recent History</h2>
+            <div class="history-header">
+                <h2>🕒 Recent History</h2>
+                <button
+                        id="clear-history-btn"
+                        title="Clear all history">
+                    🗑
+                </button>
+            </div>
 
             <div id="history-list">
 
@@ -68,6 +75,10 @@
                     id="input-text"
                     placeholder="Enter text to translate..."
             ></textarea>
+
+            <div class="character-counter">
+                <span id="character-count">0</span> / 5000
+            </div>
 
             <!-- Translate -->
 

@@ -2,7 +2,9 @@ from flask import Flask, render_template, request, jsonify
 from database.database import (
     initialize_database,
     save_translation,
-    get_translation_history
+    get_translation_history,
+    delete_translation,
+    clear_translation_history
 )
 from services.translator import translate_text
 
@@ -51,6 +53,24 @@ def history():
 
     return jsonify(history)
 
+@app.route("/history/<int:history_id>", methods=["DELETE"])
+def delete_history(history_id):
+    delete_translation(history_id)
+
+    return jsonify({
+        "message": "Translation deleted successfully."
+        })
+
+@app.route("/history", methods=["DELETE"])
+def clear_history():
+
+    clear_translation_history()
+
+    return jsonify({
+        "message": "History cleared successfully."
+    })
+
 
 if __name__ == "__main__":
     app.run(debug=True)
+
